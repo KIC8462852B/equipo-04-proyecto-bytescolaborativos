@@ -4,6 +4,12 @@
 -- Sistema de Recomendaciones con Ratings
 -- ============================================
 
+-- 0️⃣ Limpiar tablas existentes (si es necesario)
+DROP TABLE IF EXISTS "Recommendation" CASCADE;
+DROP TABLE IF EXISTS "Rating" CASCADE;
+DROP TABLE IF EXISTS "Product" CASCADE;
+DROP TABLE IF EXISTS "User" CASCADE;
+
 -- 1️⃣ Extensiones necesarias
 CREATE EXTENSION IF NOT EXISTS pgcrypto;  -- Para gen_random_uuid()
 
@@ -42,8 +48,9 @@ CREATE TABLE "Product" (
 -- Índice para búsquedas de productos activos (90% de las consultas)
 CREATE INDEX idx_product_active ON "Product" (is_active) WHERE is_active = true;  -- Índice parcial
 
--- Índice para búsquedas de texto en nombre
-CREATE INDEX idx_product_name_trgm ON "Product" USING gin (name gin_trgm_ops);  -- Requiere pg_trgm para búsqueda fuzzy
+-- Índice para búsquedas de texto en nombre (requiere extensión pg_trgm)
+-- CREATE EXTENSION IF NOT EXISTS pg_trgm;  -- Descomentar si necesitas búsqueda fuzzy
+-- CREATE INDEX idx_product_name_trgm ON "Product" USING gin (name gin_trgm_ops);
 
 -- ============================================
 -- 4️⃣ Tabla Rating - Optimizada
