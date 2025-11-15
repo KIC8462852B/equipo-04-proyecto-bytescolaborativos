@@ -1,73 +1,60 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
-/**
- * Entidad Rating - Representa una valoración de un usuario hacia un producto
- */
-@Entity
-@Table(
-    name = "\"Rating\"", 
-    schema = "public",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "rating_user_product_unique",
-            columnNames = {"user_id", "product_id"}
-        )
-    },
-    indexes = {
-        @Index(name = "idx_rating_product_score", columnList = "product_id, score"),
-        @Index(name = "idx_rating_user_created", columnList = "user_id, created_at DESC")
-    }
-)
+import org.hibernate.annotations.UuidGenerator;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"user", "product"})
-@EqualsAndHashCode(of = "id")
+@Entity
+@Table(name = "ratings")
 public class Rating {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", updatable = false, nullable = false)
+    @GeneratedValue
+    @UuidGenerator
+    @Column(nullable = false, updatable = false)
     private UUID id;
 
-    @NotNull(message = "El usuario no puede ser nulo")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_rating_user"))
-    private User user;
+    // RELACIONES
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;  // UN usuario puede tener MUCHOS ratings
 
-    @NotNull(message = "El producto no puede ser nulo")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false, foreignKey = @ForeignKey(name = "fk_rating_product"))
-    private Product product;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product; // UN producto puede tener MUCHOS ratings
 
-    @NotNull(message = "El score no puede ser nulo")
-    @Min(value = 1, message = "El score mínimo es 1")
-    @Max(value = 5, message = "El score máximo es 5")
-    @Column(name = "score", nullable = false)
-    private Short score;
+   // ATRIBUTOS
+    @Column(nullable = false)
+    private int score; // Puntuación del rating (por ejemplo, de 1 a 5)
 
-    @Column(name = "comment", columnDefinition = "TEXT")
-    private String comment;
+    @Column(nullable = false)
+    private Instant createdAt;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
+    @PrePersist
+    public void prePersist() {
+        if (createdAt == null) {
+            createdAt = Instant.now();
+        }
+    }
 }
-

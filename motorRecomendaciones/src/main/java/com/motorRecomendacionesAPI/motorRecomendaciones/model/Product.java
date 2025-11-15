@@ -1,60 +1,68 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-/**
- * Entidad Product - Representa un producto en el sistema de recomendaciones
- */
-@Entity
-@Table(name = "\"Product\"", schema = "public")
+import org.hibernate.annotations.UuidGenerator;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
-@EqualsAndHashCode(of = "id")
+@Entity
+@Table(name = "products")
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", updatable = false, nullable = false)
+    @GeneratedValue
+    @UuidGenerator
+    @Column(nullable = false, updatable = false)
     private UUID id;
 
-    @NotBlank(message = "El nombre del producto no puede estar vacío")
-    @Size(max = 100, message = "El nombre no puede exceder 100 caracteres")
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(nullable = false, length = 120)
     private String name;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(columnDefinition = "text")
     private String description;
 
-    @NotNull(message = "El precio no puede ser nulo")
-    @DecimalMin(value = "0.0", inclusive = true, message = "El precio no puede ser negativo")
-    @Column(name = "price", nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
+    @Column(length = 80)
+    private String category;
 
-    @Builder.Default
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
+    // LISTA DE ETIQUETAS DEL PRODUCTO (COLECCIÓN SIMPLE)
+    @ElementCollection
+    @CollectionTable(name = "product_tags", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "tag", nullable = false, length = 50)
+    private Set<String> tags;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    @Column(nullable = false)
+    private Long popularityScore;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
+    // RELACIONES
+
+    // RATINGS DEL PRODUCTO 1:N
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings;
+
+    // RECOMMENDATIONS DEL PRODUCTO N:M
+    @ManyToMany(mappedBy = "products")
+    private List<Recommendation> recommendations;
 }
-

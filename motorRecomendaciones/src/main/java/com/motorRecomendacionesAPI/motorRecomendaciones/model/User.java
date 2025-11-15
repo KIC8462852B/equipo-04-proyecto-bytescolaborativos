@@ -1,51 +1,81 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.OffsetDateTime;
+import java.time.Instant;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Entidad User - Representa un usuario en el sistema de recomendaciones
  */
 @Entity
-@Table(name = "\"User\"", schema = "public")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
 @EqualsAndHashCode(of = "id")
+@ToString
+@Builder
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", updatable = false, nullable = false)
+    @GeneratedValue
+    @Column(nullable = false, updatable = false)
     private UUID id;
 
-    @NotBlank(message = "El username no puede estar vacío")
-    @Size(max = 50, message = "El username no puede exceder 50 caracteres")
-    @Column(name = "username", nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
-    @NotBlank(message = "El email no puede estar vacío")
-    @Email(message = "Formato de email inválido")
-    @Size(max = 100, message = "El email no puede exceder 100 caracteres")
-    @Column(name = "email", nullable = false, unique = true, length = 100)
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    //RELACIONES
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Set<UserRole> roles;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
+    //RATINGS DEL USUARIO 1:N
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings;
+
+    // RECOMMENDATIONS DEL USUARIO 1:N
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Recommendation> recommendations;
+
+    @Column(nullable = false)
+    private Instant createdAt;
+
+    @PrePersist
+    public void PrePersist() {
+        createdAt = Instant.now();
+    }
+
 }
