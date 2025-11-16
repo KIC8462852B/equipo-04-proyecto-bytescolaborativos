@@ -1,7 +1,6 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.config.security;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.config.security.filter.JwtAuthenticationFilter;
-import com.motorRecomendacionesAPI.motorRecomendaciones.config.security.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +30,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -42,8 +40,7 @@ public class SecurityConfiguration {
                     http.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
                     http.anyRequest().authenticated();
                 })
-                .addFilter(jwtAuthenticationFilter)
-                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
