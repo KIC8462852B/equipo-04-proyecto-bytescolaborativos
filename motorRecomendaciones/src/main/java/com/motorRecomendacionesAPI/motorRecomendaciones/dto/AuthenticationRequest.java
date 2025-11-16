@@ -1,14 +1,14 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.dto;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record AuthenticationRequest(
-        @NotEmpty(message = "El username no debe estar vacío")
-        @Size(max = 120, message = "El username no debe exceder 120 caracteres")
-        String username,
-        @NotEmpty(message = "La contraseña no debe estar vacía")
-        @Size(min = 8, max = 20, message = "La contraseña debe tener entre 8 y 20 caracteres")
+        @NotBlank(message = "the email must not be empty")
+        @Size(max = 120, message = "then email must not exceed 120 characters")
+        String email,
+        @NotBlank(message = "the password must not be empty")
+        @Size(min = 8, max = 20, message = "the password must be between 8 and 20 characters")
         String password
 ) {
 }
