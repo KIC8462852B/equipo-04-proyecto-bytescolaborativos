@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
@@ -25,20 +27,31 @@ public class JwtUtil {
         this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String username) {
-        return Jwts.builder()
-                .id(UUID.randomUUID().toString())
-                .subject(username)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + this.EXPIRATION_TIME))
-                .notBefore(new Date(System.currentTimeMillis()))
-                .signWith(this.secretKey)
-                .compact();
+    public String generateToken(UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        String role = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining());
+        return buildToken(username, role);
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public String extractUsername(String token) {
+        return this.extractClaim(token, Claims::getSubject);
+    }
+
+    private String buildToken(String username, String role) {
+        return Jwts.builder()
+                .id(UUID.randomUUID().toString())
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + this.EXPIRATION_TIME))
+                .claim("role", role)
+                .notBefore(new Date(System.currentTimeMillis()))
+                .signWith(this.secretKey)
+                .compact();
     }
 
     private boolean isTokenExpired(String token) {
@@ -53,9 +66,5 @@ public class JwtUtil {
                 .parseSignedClaims(token)
                 .getPayload();
         return claimsResolver.apply(claims);
-    }
-
-    private String extractUsername(String token) {
-        return this.extractClaim(token, Claims::getSubject);
     }
 }
