@@ -35,3 +35,8 @@ springdoc:
     operations-sorter: alpha
     tags-sorter: alpha
     display-request-duration: true
+
+# Jwt Config
+jwt:
+  secret: 2bd24c0f2ae17ea3bf23bccdf0b96af73a13e9c2f125b03293d3e1f71999f39b
+  expiration: 3600000  # 1 hora en milisegundos
