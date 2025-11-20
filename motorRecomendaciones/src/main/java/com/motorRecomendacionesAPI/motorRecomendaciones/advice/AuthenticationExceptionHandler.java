@@ -29,7 +29,7 @@ public class AuthenticationExceptionHandler {
                 request.getDescription(false).substring(4),
                 null
         );
-        return ResponseEntity.badRequest().body(errorResponse);
+        return ResponseEntity.status(status).body(errorResponse);
     }
 
     @ExceptionHandler({BadCredentialsException.class, UsernameNotFoundException.class})
