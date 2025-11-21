@@ -3,6 +3,7 @@ package com.motorRecomendacionesAPI.motorRecomendaciones.advice;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.ErrorResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.DuplicateRatingException;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.ProductNotFoundException;
+import com.motorRecomendacionesAPI.motorRecomendaciones.exception.RatingNotFoundException;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.ResourceNotFoundException;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import java.time.Instant;
 @RestControllerAdvice
 public class RatingExceptionHandler {
 
-    @ExceptionHandler({UserNotFoundException.class, ProductNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class, ProductNotFoundException.class, RatingNotFoundException.class})
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException exception, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
 
