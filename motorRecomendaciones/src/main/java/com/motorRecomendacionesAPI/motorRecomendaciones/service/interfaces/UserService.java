@@ -4,7 +4,7 @@ import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
 
 public interface UserService {
 
-    User getUserByUsername(String username);
+    User getUserByEmail(String email);
 
     void ensureUniqueCredentials(String email, String username);
 }
