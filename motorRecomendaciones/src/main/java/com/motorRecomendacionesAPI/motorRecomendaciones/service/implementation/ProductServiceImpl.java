@@ -14,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    public ProductRepository repository;
+    public final ProductRepository repository;
 
     @Override
     @Transactional(readOnly = true)
