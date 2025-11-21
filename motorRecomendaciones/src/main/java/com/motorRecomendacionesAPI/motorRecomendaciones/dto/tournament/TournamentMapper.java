@@ -1,5 +1,4 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.dto.tournament;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
