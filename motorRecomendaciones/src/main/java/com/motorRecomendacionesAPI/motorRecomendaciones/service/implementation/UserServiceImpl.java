@@ -18,9 +18,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public User getUserByUsername(String username) {
-        return repository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found."));
+    public User getUserByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found."));
     }
 
     @Override

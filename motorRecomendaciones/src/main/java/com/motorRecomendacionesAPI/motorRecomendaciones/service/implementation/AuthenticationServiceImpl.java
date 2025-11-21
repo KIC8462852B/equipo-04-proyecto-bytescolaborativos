@@ -66,7 +66,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                 .collect(Collectors.toSet());
-        return new UsernamePasswordAuthenticationToken(user.getUsername(), null, authorities);
+        return new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
     }
 
     private Authentication authenticateCredentials(String email, String password) {

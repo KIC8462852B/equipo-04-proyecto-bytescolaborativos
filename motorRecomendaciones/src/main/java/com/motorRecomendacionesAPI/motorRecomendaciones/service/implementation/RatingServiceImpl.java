@@ -3,15 +3,11 @@ package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RatingRequest;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RatingResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.DuplicateRatingException;
-import com.motorRecomendacionesAPI.motorRecomendaciones.exception.ProductNotFoundException;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.RatingNotFoundException;
-import com.motorRecomendacionesAPI.motorRecomendaciones.exception.UserNotFoundException;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.Product;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.Rating;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
-import com.motorRecomendacionesAPI.motorRecomendaciones.repository.ProductRepository;
 import com.motorRecomendacionesAPI.motorRecomendaciones.repository.RatingRepository;
-import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
 import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.ProductService;
 import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.RatingService;
 import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.UserService;
@@ -33,7 +29,7 @@ public class RatingServiceImpl implements RatingService {
     @Override
     @Transactional
     public RatingResponse createRating(RatingRequest request, String username) {
-        User user = userService.getUserByUsername(username);
+        User user = userService.getUserByEmail(username);
         Product product = productService.getProductById(request.productId());
 
         this.ensureUserHasNotRatedProduct(user, product);
@@ -54,6 +50,8 @@ public class RatingServiceImpl implements RatingService {
     @Transactional(readOnly = true)
     public RatingResponse averageScoreByProduct(UUID productId) {
         Double averaged = this.averageRating(productId);
+
+        if (averaged == null) throw new RatingNotFoundException("No ratings found for product with ID " + productId);
 
         return new RatingResponse(
                 "Average score retrieved successfully",
