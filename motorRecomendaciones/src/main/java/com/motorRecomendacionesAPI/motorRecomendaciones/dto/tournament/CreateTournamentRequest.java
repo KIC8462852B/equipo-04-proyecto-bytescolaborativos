@@ -26,10 +26,8 @@ public class CreateTournamentRequest {
     private Instant endDate;
 
     @NotNull(message = "La fecha de apertura de registro es obligatoria")
-    @Future(message = "La apertura del registro debe ser futura")
     private Instant registrationOpenAt;
 
     @NotNull(message = "La fecha de cierre de registro es obligatoria")
-    @Future(message = "El cierre del registro debe ser futuro")
     private Instant registrationCloseAt;
 }

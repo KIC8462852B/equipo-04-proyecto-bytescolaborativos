@@ -1,4 +1,5 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -30,9 +31,9 @@ public class TournamentServiceImpl implements TournamentService {
         validateDateCoherence(request);
 
         Tournament entity = mapper.toEntity(request);
-
-        entity.setStatus(TournamentStatus.UPCOMING);
-
+        Instant now = Instant.now();
+        TournamentStatus status = computeStatus(request, now);
+        entity.setStatus(status);
         Tournament saved = repository.save(entity);
 
         return mapper.toResponse(saved);
@@ -57,38 +58,55 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public TournamentResponse findById(UUID id) {
-    Tournament entity = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Torneo no encontrado"));
+        Tournament entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Torneo no encontrado"));
 
-    return mapper.toResponse(entity);
-}
-  
-@Override
-public void delete(UUID id) {
-    if (!repository.existsById(id)) {
-        throw new ResourceNotFoundException("Torneo no encontrado");
+        return mapper.toResponse(entity);
     }
-    repository.deleteById(id);
-}
+
+    @Override
+    public void delete(UUID id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Torneo no encontrado");
+        }
+        repository.deleteById(id);
+    }
 
     private void validateDateCoherence(CreateTournamentRequest request) {
 
         Instant now = Instant.now();
 
         if (request.getStartDate().isBefore(now)) {
-            throw new IllegalArgumentException("startDate must be in the future");
+            throw new IllegalArgumentException("La fecha de inicio debe ser futura");
         }
 
         if (request.getEndDate().isBefore(request.getStartDate())) {
-            throw new IllegalArgumentException("endDate must be after startDate");
+            throw new IllegalArgumentException("La fecha de fin debe ser posterior a la fecha de inicio");
         }
 
         if (request.getRegistrationOpenAt().isAfter(request.getRegistrationCloseAt())) {
-            throw new IllegalArgumentException("registrationOpenAt must be before registrationCloseAt");
+            throw new IllegalArgumentException("La apertura de registro debe ser anterior al cierre de registro");
         }
 
         if (request.getRegistrationCloseAt().isAfter(request.getStartDate())) {
-            throw new IllegalArgumentException("registrationCloseAt must be before startDate");
+            throw new IllegalArgumentException("El cierre de registro debe ocurrir antes del inicio del torneo");
         }
+
+    }
+
+    private TournamentStatus computeStatus(CreateTournamentRequest request, Instant now) {
+
+        Instant open = request.getRegistrationOpenAt();
+        Instant close = request.getRegistrationCloseAt();
+
+        if (now.isBefore(open)) {
+            return TournamentStatus.UPCOMING;
+        }
+
+        if (!now.isAfter(close)) {
+            return TournamentStatus.OPEN;
+        }
+
+        return TournamentStatus.CLOSED;
     }
 }

@@ -40,10 +40,11 @@ public class SecurityConfiguration {
 
                     //PUBLIC ENDPOINTS
                     http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
-                    http.requestMatchers(HttpMethod.GET, "/api/tournaments").permitAll();
+                    http.requestMatchers(HttpMethod.GET, "/tournaments").permitAll();
+                    http.requestMatchers(HttpMethod.GET, "/tournaments/**").permitAll();
                     //ADMIN-ONLY ENDPOINTS
-                    http.requestMatchers(HttpMethod.POST, "/api/tournaments").hasRole("ADMIN");
-                    http.requestMatchers(HttpMethod.DELETE, "/api/tournaments/**").hasRole("ADMIN");
+                    http.requestMatchers(HttpMethod.POST, "/tournaments").hasRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/tournaments/**").hasRole("ADMIN");
                     //PROTECTED ENDPOINTS
                     http.anyRequest().authenticated();
                 })

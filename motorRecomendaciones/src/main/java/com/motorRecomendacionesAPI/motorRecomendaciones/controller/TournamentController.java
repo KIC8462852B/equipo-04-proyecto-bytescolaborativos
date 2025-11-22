@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/tournaments")
+@RequestMapping("/tournaments")
 @RequiredArgsConstructor
 public class TournamentController {
 
