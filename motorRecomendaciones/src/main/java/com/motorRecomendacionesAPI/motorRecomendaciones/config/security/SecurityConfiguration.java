@@ -17,6 +17,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.config.security.filter.JwtAuthenticationFilter;
 import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
@@ -39,6 +44,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(http -> {
 
                     //PUBLIC ENDPOINTS
+                    http.requestMatchers(HttpMethod.GET, "/swagger-ui*/**", "/api-docs/**").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
                     http.requestMatchers(HttpMethod.GET, "/tournaments").permitAll();
                     http.requestMatchers(HttpMethod.GET, "/tournaments/**").permitAll();

@@ -64,8 +64,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Transactional(readOnly = true)
     public void ensureUniqueCredentials(String email, String username) {
-        if (repository.existsByEmail(email)) throw new EmailAlreadyInUseException("El correo electrónico ya está en uso: " + email);
-        if (repository.existsByUsername(username)) throw new UsernameAlreadyInUseException("El nombre de usuario ya está en uso: " + username);
+        if (repository.existsByEmail(email)) throw new EmailAlreadyInUseException("email already in use: " + email);
+        if (repository.existsByUsername(username))
+            throw new UsernameAlreadyInUseException("username already in use: " + username);
     }
 
     private Authentication createAuthentication(User user) {
