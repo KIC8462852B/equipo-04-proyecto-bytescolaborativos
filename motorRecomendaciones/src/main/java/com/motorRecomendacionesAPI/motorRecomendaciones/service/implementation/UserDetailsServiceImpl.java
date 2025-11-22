@@ -1,15 +1,17 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
 
-import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
-import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
+import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserDetails buildUserDetails(User user) {
         return org.springframework.security.core.userdetails.User
                 .builder()
-                .username(user.getUsername())
+                .username(user.getEmail())
                 .password(user.getPassword())
                 .authorities(this.getAuthorities(user))
                 .disabled(false)

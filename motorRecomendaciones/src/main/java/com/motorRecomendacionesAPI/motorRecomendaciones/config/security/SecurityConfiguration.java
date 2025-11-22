@@ -1,9 +1,5 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.config.security;
 
-import com.motorRecomendacionesAPI.motorRecomendaciones.config.security.filter.JwtAuthenticationFilter;
-import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation.UserDetailsServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,12 +12,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -30,6 +23,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+import com.motorRecomendacionesAPI.motorRecomendaciones.config.security.filter.JwtAuthenticationFilter;
+import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation.UserDetailsServiceImpl;
+
+import lombok.RequiredArgsConstructor;
+
+//Todo: GET Torneos publico, solo ADMIN POST Y DELETE DE TORNEOS, 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
@@ -42,8 +42,16 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
+
+                    //PUBLIC ENDPOINTS
                     http.requestMatchers(HttpMethod.GET, "/swagger-ui*/**", "/api-docs/**").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
+                    http.requestMatchers(HttpMethod.GET, "/tournaments").permitAll();
+                    http.requestMatchers(HttpMethod.GET, "/tournaments/**").permitAll();
+                    //ADMIN-ONLY ENDPOINTS
+                    http.requestMatchers(HttpMethod.POST, "/tournaments").hasRole("ADMIN");
+                    http.requestMatchers(HttpMethod.DELETE, "/tournaments/**").hasRole("ADMIN");
+                    //PROTECTED ENDPOINTS
                     http.anyRequest().authenticated();
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

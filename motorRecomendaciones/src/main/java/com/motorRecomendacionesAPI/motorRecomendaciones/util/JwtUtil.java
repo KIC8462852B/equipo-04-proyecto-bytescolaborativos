@@ -1,20 +1,22 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import javax.crypto.SecretKey;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
@@ -29,9 +31,9 @@ public class JwtUtil {
     }
 
     public String generateToken(Authentication authentication) {
-        String username = authentication.getName();
+        String email = authentication.getName();
         String role = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining());
-        return buildToken(username, role);
+        return buildToken(email, role);
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
@@ -43,10 +45,10 @@ public class JwtUtil {
         return this.extractClaim(token, Claims::getSubject);
     }
 
-    private String buildToken(String username, String role) {
+    private String buildToken(String email, String role) {
         return Jwts.builder()
                 .id(UUID.randomUUID().toString())
-                .subject(username)
+                .subject(email)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + this.EXPIRATION_TIME))
                 .claim("role", role)

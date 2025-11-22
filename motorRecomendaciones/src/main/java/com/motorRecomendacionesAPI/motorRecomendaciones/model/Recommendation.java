@@ -55,15 +55,15 @@ public class Recommendation {
 
     // ATRIBUTOS
     @Column(nullable = false)
-    private Instant generatedAt;
+    private Instant computedAt;
 
     @Column(nullable = false, length = 50)
     private String algorithmVersion;
 
     @PrePersist
     public void prePersist() {
-        if (generatedAt == null) {
-            generatedAt = Instant.now();
+        if (computedAt == null) {
+            computedAt = Instant.now();
         }
     }
 }
