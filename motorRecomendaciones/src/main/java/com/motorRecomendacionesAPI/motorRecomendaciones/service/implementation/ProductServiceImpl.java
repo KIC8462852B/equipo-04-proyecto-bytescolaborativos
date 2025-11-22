@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -21,5 +23,14 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductById(UUID productId) {
         return repository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product with ID " + productId + " not found."));
+    }
+
+    public List<Product> getProductsByTags(List<String> tags) {
+        return repository.findAllByTagsOrderByPopularityScoreDesc(Set.copyOf(tags));
+    }
+
+    @Override
+    public List<Product> getTopPopularProducts() {
+        return repository.findAllOrderByPopularityScore();
     }
 }
