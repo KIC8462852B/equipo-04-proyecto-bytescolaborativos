@@ -42,7 +42,7 @@ public class RatingServiceImpl implements RatingService {
 
         return new RatingResponse(
                 "Rating created successfully",
-                savedRating.getCreatedAt(),
+                savedRating.getComputedAt(),
                 averageScore
         );
     }

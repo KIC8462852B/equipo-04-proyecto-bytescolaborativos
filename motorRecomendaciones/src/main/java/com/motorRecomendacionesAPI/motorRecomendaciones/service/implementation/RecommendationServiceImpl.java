@@ -57,7 +57,7 @@ public class RecommendationServiceImpl implements RecommendationService {
 
         Recommendation recommendation = repository.save(this.buildRecommendation(user, filtered));
 
-        return new RecommendationResponse(recommendation.getGeneratedAt(), finalList);
+        return new RecommendationResponse(recommendation.getComputedAt(), finalList);
     }
 
     private List<Product> determineCandidateProducts(List<Product> userHighRated) {
