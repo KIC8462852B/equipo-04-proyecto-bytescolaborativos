@@ -32,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserRepository repository;
+    private final UserService userService;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -51,7 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
-        this.ensureUniqueCredentials(request.email(), request.username());
+        userService.ensureUniqueCredentials(request.email(), request.username());
 
         User newUser = this.createUser(request);
         User savedUser = this.repository.save(newUser);
@@ -60,13 +61,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String token = jwtUtil.generateToken(authentication);
 
         return new AuthenticationResponse(token, savedUser.getUsername(), Instant.now());
-    }
-
-    @Transactional(readOnly = true)
-    public void ensureUniqueCredentials(String email, String username) {
-        if (repository.existsByEmail(email)) throw new EmailAlreadyInUseException("email already in use: " + email);
-        if (repository.existsByUsername(username))
-            throw new UsernameAlreadyInUseException("username already in use: " + username);
     }
 
     private Authentication createAuthentication(User user) {
