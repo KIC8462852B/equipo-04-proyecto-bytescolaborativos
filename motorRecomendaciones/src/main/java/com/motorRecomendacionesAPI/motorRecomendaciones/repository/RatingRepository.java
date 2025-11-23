@@ -1,5 +1,6 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,8 @@ public interface RatingRepository extends JpaRepository<Rating, UUID> {
     Double getAverageScoreByProductId(UUID productId);
 
     boolean existsByProductId(UUID productId);
+
+    @Query("SELECT r FROM Rating r WHERE r.user.id = :userId AND r.score >= 4")
+    List<Rating> findHighRatingsByUserId(UUID userId);
+
 }

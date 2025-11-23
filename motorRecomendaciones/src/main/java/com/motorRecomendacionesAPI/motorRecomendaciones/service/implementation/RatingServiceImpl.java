@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -60,7 +61,18 @@ public class RatingServiceImpl implements RatingService {
         );
     }
 
-    private Double averageRating(UUID productId) {
+    @Override
+    @Transactional(readOnly = true)
+    public List<Product> getProductsWithHighRatingByUser(UUID userId) {
+        var ratings = repository.findHighRatingsByUserId(userId);
+        return ratings.stream()
+                .map(Rating::getProduct)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Double averageRating(UUID productId) {
         return repository.getAverageScoreByProductId(productId);
     }
 
