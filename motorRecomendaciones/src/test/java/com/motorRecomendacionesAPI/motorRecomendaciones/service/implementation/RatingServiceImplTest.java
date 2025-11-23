@@ -72,7 +72,7 @@ public class RatingServiceImplTest {
 
         Rating savedRating = mock(Rating.class);
         Instant now = Instant.now();
-        when(savedRating.getCreatedAt()).thenReturn(now);
+        when(savedRating.getComputedAt()).thenReturn(now);
         when(repository.save(any(Rating.class))).thenReturn(savedRating);
 
         double avg = 4.2;

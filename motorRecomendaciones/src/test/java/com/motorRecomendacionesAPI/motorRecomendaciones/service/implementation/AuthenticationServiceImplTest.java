@@ -52,6 +52,9 @@ class AuthenticationServiceImplTest {
     @InjectMocks
     AuthenticationServiceImpl authenticationService;
 
+    @InjectMocks
+    UserServiceImpl userService;
+
     @Test
     @DisplayName("authenticate -> success: returns token and username")
     void authenticate_success() {
@@ -154,7 +157,7 @@ class AuthenticationServiceImplTest {
 
         when(userRepository.existsByEmail(email)).thenReturn(true);
 
-        assertThrows(EmailAlreadyInUseException.class, () -> authenticationService.ensureUniqueCredentials(email, username));
+        assertThrows(EmailAlreadyInUseException.class, () -> userService.ensureUniqueCredentials(email, username));
         verify(userRepository, times(1)).existsByEmail(email);
     }
 
@@ -167,7 +170,8 @@ class AuthenticationServiceImplTest {
         when(userRepository.existsByEmail(email)).thenReturn(false);
         when(userRepository.existsByUsername(username)).thenReturn(true);
 
-        assertThrows(UsernameAlreadyInUseException.class, () -> authenticationService.ensureUniqueCredentials(email, username));
+        assertThrows(UsernameAlreadyInUseException.class, () -> userService.ensureUniqueCredentials(email, username));
         verify(userRepository, times(1)).existsByUsername(username);
-    }}
+    }
+}
 
