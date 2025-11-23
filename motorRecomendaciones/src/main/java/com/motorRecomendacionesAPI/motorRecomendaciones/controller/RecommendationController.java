@@ -1,5 +1,6 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.controller;
 
+import com.motorRecomendacionesAPI.motorRecomendaciones.dto.ErrorResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RecommendationResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.RecommendationService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,8 @@ public class RecommendationController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = RecommendationResponse.class))),
             @ApiResponse(responseCode = "400", description = "Invalid userId supplied"),
-            @ApiResponse(responseCode = "404", description = "User or recommendations not found"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized access to recommendations"),
+            @ApiResponse(responseCode = "404", description = "User or recommendations not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @GetMapping("/{userId}")
     public ResponseEntity<RecommendationResponse> getRecommendations(@PathVariable UUID userId) {
