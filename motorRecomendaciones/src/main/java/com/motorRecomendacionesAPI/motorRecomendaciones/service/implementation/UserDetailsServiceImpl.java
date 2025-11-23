@@ -1,15 +1,17 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
 
-import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
-import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
+import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
