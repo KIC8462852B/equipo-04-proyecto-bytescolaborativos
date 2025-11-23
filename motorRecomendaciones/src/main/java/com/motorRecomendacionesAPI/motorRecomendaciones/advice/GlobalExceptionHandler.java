@@ -12,18 +12,19 @@ import com.motorRecomendacionesAPI.motorRecomendaciones.dto.ErrorResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex, WebRequest request) {
         ErrorResponse response = new ErrorResponse(
-                Instant.now().toString(),
-                String.valueOf(HttpStatus.NOT_FOUND.value()),
-                HttpStatus.NOT_FOUND.getReasonPhrase(),
                 ex.getMessage(),
+                String.valueOf(HttpStatus.NOT_FOUND.value()),
+                Instant.now().toString(),
+                request.getDescription(false).substring(4),
                 null
         );
 
@@ -31,21 +32,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(
-            MethodArgumentNotValidException ex,
-            HttpServletRequest request
-    ) {
+    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex, WebRequest request) {
         String message = ex.getBindingResult().getFieldErrors().stream()
                 .map(err -> err.getField() + ": " + err.getDefaultMessage())
                 .findFirst()
                 .orElse("Validation failed");
 
         ErrorResponse errorResponse = new ErrorResponse(
-                Instant.now().toString(),
-                String.valueOf(HttpStatus.BAD_REQUEST.value()),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 message,
-                request.getRequestURI()
+                String.valueOf(HttpStatus.BAD_REQUEST.value()),
+                Instant.now().toString(),
+                request.getDescription(false).substring(4),
+                null
         );
 
         return ResponseEntity.badRequest().body(errorResponse);
