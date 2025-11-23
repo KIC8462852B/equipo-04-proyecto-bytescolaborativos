@@ -69,7 +69,7 @@ INSERT INTO product_tags (product_id, tag) VALUES
 -- ================================
 --             RATINGS
 -- ================================
-INSERT INTO ratings (id, user_id, product_id, score, created_at)
+INSERT INTO ratings (id, user_id, product_id, score, computed_at)
 VALUES
   ('88888888-8888-8888-8888-888888888888',
    '11111111-1111-1111-1111-111111111111',
@@ -90,7 +90,7 @@ VALUES
 -- ================================
 --         RECOMMENDATIONS
 -- ================================
-INSERT INTO recommendations (id, user_id, generated_at, algorithm_version)
+INSERT INTO recommendations (id, user_id, computed_at, algorithm_version)
 VALUES
   ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
    '11111111-1111-1111-1111-111111111111',
