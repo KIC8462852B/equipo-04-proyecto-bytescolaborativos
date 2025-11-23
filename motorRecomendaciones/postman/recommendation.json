@@ -1,0 +1,193 @@
+{
+  "info": {
+    "_postman_id": "c9b24680-recommendations-test",
+    "name": "Motor de Recomendaciones - Recommendations",
+    "description": "Pruebas para el endpoint de generación de recomendaciones. Requiere un token de autenticación (PLAYER o ADMIN).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Obtener Recomendaciones (Juan Perez - Exitoso)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Validar Status Code",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// Parsear respuesta",
+              "var jsonData = pm.response.json();",
+              "",
+              "// Validar estructura de la respuesta",
+              "pm.test(\"Response has timestamp\", function () {",
+              "    pm.expect(jsonData.timestamp).to.not.be.null;",
+              "});",
+              "",
+              "pm.test(\"Response has recommendedProducts array\", function () {",
+              "    pm.expect(jsonData.recommendedProducts).to.be.an(\"array\");",
+              "});",
+              "",
+              "// Validar que no recomienda productos que el usuario ya calificó",
+              "// Juan ya calificó la Laptop (ID: d15b79bd...) y el Mouse (ID: 1d2aeabb...)",
+              "pm.test(\"Does not contain already rated products\", function () {",
+              "    var ratedProductIds = [",
+              "        \"d15b79bd-ca03-48fd-8d52-a22e6b9aaf6b\", ",
+              "        \"1d2aeabb-0292-4255-9631-59bbfea40a62\"",
+              "    ];",
+              "    ",
+              "    jsonData.recommendedProducts.forEach(function(product) {",
+              "        pm.expect(ratedProductIds).to.not.include(product.id, \"Encontró un producto ya calificado: \" + product.name);",
+              "    });",
+              "});",
+              "",
+              "// Validar lógica de tags (Juan le gusta Gaming/Portable/Salud/Oficina)",
+              "// Debería recomendar Monitor (Diseño) o Teclado (Gaming)",
+              "pm.test(\"Contains relevant recommendations\", function () {",
+              "    var productNames = jsonData.recommendedProducts.map(p => p.name);",
+              "    // El Teclado comparte el tag 'Gaming' con la Laptop que Juan calificó con 5",
+              "    pm.expect(JSON.stringify(productNames)).to.contain(\"Teclado\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/recommendations/{{user_id_juan}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "recommendations",
+            "{{user_id_juan}}"
+          ]
+        },
+        "description": "Obtiene recomendaciones para Juan Pérez. Basado en el data.sql, Juan ha calificado una Laptop (Gaming) con 5 estrellas, por lo que el sistema debería recomendarle otros productos Gaming (como el Teclado) y filtrar los que ya compró."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Obtener Recomendaciones (Usuario No Encontrado)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "",
+              "pm.test(\"Error message indicates User not found\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.contain(\"not found\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/recommendations/{{user_id_non_existent}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "recommendations",
+            "{{user_id_non_existent}}"
+          ]
+        },
+        "description": "Intenta obtener recomendaciones para un UUID que no existe en la base de datos."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Obtener Recomendaciones (Sin Token - 403)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 403 Forbidden\", function () {",
+              "    // Spring Security por defecto devuelve 403 cuando falta el token en rutas protegidas",
+              "    pm.response.to.have.status(403);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/recommendations/{{user_id_juan}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "recommendations",
+            "{{user_id_juan}}"
+          ]
+        },
+        "description": "Prueba de seguridad para asegurar que el endpoint está protegido."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string",
+      "description": "Pega aquí un token válido (Logueate como Juan o Admin)"
+    },
+    {
+      "key": "user_id_juan",
+      "value": "576ad124-1e0e-4298-aa68-52e062bd6eb5",
+      "type": "string",
+      "description": "ID fijo de Juan Pérez en data.sql"
+    },
+    {
+      "key": "user_id_non_existent",
+      "value": "00000000-0000-0000-0000-000000000000",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,408 @@
+{
+  "info": {
+    "_postman_id": "b8a12345-d56b-4d06-84c3-ratings12345",
+    "name": "Motor de Recomendaciones - Ratings Tests",
+    "description": "Pruebas para el controlador de Ratings. Requiere un token de usuario con rol PLAYER (ej. juan_perez).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Crear Rating (Exitoso)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201 Created\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Response contains averageScore\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.averageScore).to.not.be.null;",
+              "    pm.expect(jsonData.message).to.eql(\"Rating created successfully\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"productId\": \"{{product_id_keyboard}}\",\n  \"score\": 5\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/ratings",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "ratings"
+          ]
+        },
+        "description": "Crea un rating de 5 estrellas para el Teclado (que no tenía ratings previos)."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Crear Rating (Duplicado - Conflict)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 409 Conflict\", function () {",
+              "    pm.response.to.have.status(409);",
+              "});",
+              "",
+              "pm.test(\"Error message indicates duplicate\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.contain(\"already rated\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"productId\": \"{{product_id_laptop}}\",\n  \"score\": 5\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/ratings",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "ratings"
+          ]
+        },
+        "description": "Intenta calificar la Laptop con el mismo usuario (asumiendo juan_perez) que ya tiene un rating en data.sql."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Crear Rating (Validación - Score Inválido Bajo)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"Validation error message present\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    // El mensaje puede variar según tu GlobalExceptionHandler, pero debería mencionar el error",
+              "    pm.expect(jsonData.message).to.contain(\"Score must be at least 1\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"productId\": \"{{product_id_keyboard}}\",\n  \"score\": 0\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/ratings",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "ratings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Crear Rating (Validación - Score Inválido Alto)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"Validation error message present\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.contain(\"Score must be at most 5\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"productId\": \"{{product_id_keyboard}}\",\n  \"score\": 6\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/ratings",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "ratings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Crear Rating (Producto No Encontrado)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404 Not Found\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});",
+              "",
+              "pm.test(\"Message says Product not found\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.contain(\"not found\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"productId\": \"00000000-0000-0000-0000-000000000000\",\n  \"score\": 5\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/ratings",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "ratings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Obtener Promedio (Exitoso)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Returns average score\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.averageScore).to.be.a(\"number\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/ratings/{{product_id_laptop}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "ratings",
+            "{{product_id_laptop}}"
+          ]
+        },
+        "description": "Obtiene el promedio de la Laptop (la cual tiene ratings en data.sql)."
+      },
+      "response": []
+    },
+    {
+      "name": "7. Obtener Promedio (Sin Ratings / No encontrado)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404 Not Found\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/ratings/{{product_id_unused}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "ratings",
+            "{{product_id_unused}}"
+          ]
+        },
+        "description": "Intenta obtener promedio de un producto que no existe o no tiene ratings."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string",
+      "description": "Pega aquí el token generado en el endpoint de Login (Usuario PLAYER)"
+    },
+    {
+      "key": "product_id_laptop",
+      "value": "d15b79bd-ca03-48fd-8d52-a22e6b9aaf6b",
+      "type": "string",
+      "description": "ID del producto 'Laptop Gamer Xtreme' (Ya tiene ratings)"
+    },
+    {
+      "key": "product_id_keyboard",
+      "value": "a3014224-b357-4667-8e54-6a4704aa86c3",
+      "type": "string",
+      "description": "ID del producto 'Teclado Mecánico RGB' (Sin ratings iniciales)"
+    },
+    {
+      "key": "product_id_unused",
+      "value": "00000000-0000-0000-0000-000000000000",
+      "type": "string"
+    }
+  ]
+}
