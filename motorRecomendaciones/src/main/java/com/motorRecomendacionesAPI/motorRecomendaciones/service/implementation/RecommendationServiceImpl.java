@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +38,15 @@ public class RecommendationServiceImpl implements RecommendationService {
 
         List<Product> candidates = determineCandidateProducts(userHighRated);
 
+        // Build a set of rated IDs and filter candidates by id (not object identity)
+        Set<UUID> ratedIds = (userHighRated == null) ? Set.of()
+                : userHighRated.stream()
+                .map(Product::getId)
+                .filter(id -> id != null)
+                .collect(Collectors.toSet());
+
         List<Product> filtered = candidates.stream()
-                .filter(p -> !userHighRated.contains(p))
+                .filter(p -> p != null && p.getId() != null && !ratedIds.contains(p.getId()))
                 .distinct()
                 .limit(MAX_RESULTS)
                 .toList();
