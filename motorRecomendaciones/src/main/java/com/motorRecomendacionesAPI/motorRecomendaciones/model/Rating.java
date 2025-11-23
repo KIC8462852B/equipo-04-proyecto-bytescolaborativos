@@ -49,12 +49,12 @@ public class Rating {
     private int score; // Puntuación del rating (por ejemplo, de 1 a 5)
 
     @Column(nullable = false)
-    private Instant createdAt;
+    private Instant computedAt;
 
     @PrePersist
     public void prePersist() {
-        if (createdAt == null) {
-            createdAt = Instant.now();
+        if (computedAt == null) {
+            computedAt = Instant.now();
         }
     }
 }

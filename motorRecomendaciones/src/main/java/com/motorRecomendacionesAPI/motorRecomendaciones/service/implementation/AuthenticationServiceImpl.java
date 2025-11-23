@@ -1,16 +1,9 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
 
-import com.motorRecomendacionesAPI.motorRecomendaciones.dto.AuthenticationRequest;
-import com.motorRecomendacionesAPI.motorRecomendaciones.dto.AuthenticationResponse;
-import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RegisterRequest;
-import com.motorRecomendacionesAPI.motorRecomendaciones.exception.EmailAlreadyInUseException;
-import com.motorRecomendacionesAPI.motorRecomendaciones.exception.UsernameAlreadyInUseException;
-import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
-import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.AuthenticationService;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.UserService;
-import com.motorRecomendacionesAPI.motorRecomendaciones.util.JwtUtil;
-import lombok.RequiredArgsConstructor;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,9 +15,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.stream.Collectors;
+import com.motorRecomendacionesAPI.motorRecomendaciones.dto.AuthenticationRequest;
+import com.motorRecomendacionesAPI.motorRecomendaciones.dto.AuthenticationResponse;
+import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RegisterRequest;
+import com.motorRecomendacionesAPI.motorRecomendaciones.exception.EmailAlreadyInUseException;
+import com.motorRecomendacionesAPI.motorRecomendaciones.exception.UsernameAlreadyInUseException;
+import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
+import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.AuthenticationService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.util.JwtUtil;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
