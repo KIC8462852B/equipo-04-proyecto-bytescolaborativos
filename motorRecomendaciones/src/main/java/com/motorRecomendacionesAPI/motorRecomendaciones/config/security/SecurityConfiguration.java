@@ -51,6 +51,8 @@ public class SecurityConfiguration {
                     //ADMIN-ONLY ENDPOINTS
                     http.requestMatchers(HttpMethod.POST, "/tournaments").hasRole("ADMIN");
                     http.requestMatchers(HttpMethod.DELETE, "/tournaments/**").hasRole("ADMIN");
+                    //PLAYER-ONLY ENDPOINTS
+                    http.requestMatchers("/ratings/**").hasRole("PLAYER");
                     //PROTECTED ENDPOINTS
                     http.anyRequest().authenticated();
                 })

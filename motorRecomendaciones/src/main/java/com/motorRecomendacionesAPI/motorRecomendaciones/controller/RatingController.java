@@ -28,7 +28,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/ratings")
-@PreAuthorize("hasRole('PLAYER')")
 @RequiredArgsConstructor
 public class RatingController {
 
