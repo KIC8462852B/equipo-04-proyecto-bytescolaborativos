@@ -66,10 +66,10 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public void delete(UUID id) {
-        if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("Torneo no encontrado");
-        }
-        repository.deleteById(id);
+        var tournament = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tournament not found: " + id));
+
+        repository.delete(tournament);
     }
 
     private void validateDateCoherence(CreateTournamentRequest request) {
