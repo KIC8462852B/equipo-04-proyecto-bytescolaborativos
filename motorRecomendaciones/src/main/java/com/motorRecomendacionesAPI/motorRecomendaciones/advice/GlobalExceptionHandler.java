@@ -7,12 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.ErrorResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.ResourceNotFoundException;
-
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.context.request.WebRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
