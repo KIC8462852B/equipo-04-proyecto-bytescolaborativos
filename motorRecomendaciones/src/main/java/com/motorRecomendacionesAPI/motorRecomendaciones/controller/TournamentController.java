@@ -17,10 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.motorRecomendacionesAPI.motorRecomendaciones.dto.ErrorResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.tournament.CreateTournamentRequest;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.tournament.TournamentResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.TournamentService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +38,15 @@ public class TournamentController {
 
     private final TournamentService service;
 
-   // CREAR TOURNAMENT (ADMIN ONLY)
+    @Operation(summary = "Create tournament", description = "Create a new tournament. Requires ADMIN role.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Tournament created",
+                    content = @Content(schema = @Schema(implementation = TournamentResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid request",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden")
+    })
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TournamentResponse> createTournament(
@@ -41,7 +56,14 @@ public class TournamentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-   // OBTENER LISTA DE TOURNAMENTS (PUBLIC)
+    @Operation(summary = "List tournaments", description = "Retrieve paginated tournaments optionally filtered by status (UPCOMING, OPEN, CLOSED).")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Tournaments retrieved",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = TournamentResponse.class)))),
+            @ApiResponse(responseCode = "400", description = "Invalid request parameters",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @GetMapping
     public ResponseEntity<Page<TournamentResponse>> listTournaments(
             @RequestParam(defaultValue = "0") int page,
@@ -53,7 +75,13 @@ public class TournamentController {
         return ResponseEntity.ok(response);
     }
 
- // OBTENER TOURNAMENT POR ID (PUBLIC)
+    @Operation(summary = "Get tournament by id", description = "Retrieve a tournament by its identifier.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Tournament found",
+                    content = @Content(schema = @Schema(implementation = TournamentResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Tournament not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @GetMapping("/{id}")
     public ResponseEntity<TournamentResponse> getTournamentById(
             @PathVariable UUID id
@@ -62,7 +90,14 @@ public class TournamentController {
         return ResponseEntity.ok(response);
     }
 
-   // ELIMINAR TOURNAMENT POR ID (ADMIN ONLY)
+    @Operation(summary = "Delete tournament", description = "Delete a tournament by id. Requires ADMIN role.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Tournament deleted"),
+            @ApiResponse(responseCode = "404", description = "Tournament not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden")
+    })
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteTournament(
