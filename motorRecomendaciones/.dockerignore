@@ -1,0 +1,11 @@
+target/
+build/
+.idea/
+.vscode/
+*.log
+*.md
+.git
+.gitignore
+Dockerfile*
+README*
+settings.xml

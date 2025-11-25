@@ -1,0 +1,305 @@
+{
+  "info": {
+    "_postman_id": "d1a24680-auth-test",
+    "name": "Motor de Recomendaciones - Auth Tests",
+    "description": "Colección de pruebas para el controlador de Autenticación (Login y Registro). Incluye validaciones de errores y captura automática de tokens.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Register - Nuevo Usuario (Exitoso)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response returns token and username\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.token).to.not.be.null;",
+              "    pm.expect(jsonData.username).to.eql(\"nuevo_player_01\");",
+              "});",
+              "",
+              "// Guardamos el token por si queremos usar este usuario inmediatamente",
+              "var jsonData = pm.response.json();",
+              "pm.collectionVariables.set(\"jwt_token\", jsonData.token);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"nuevo@test.com\",\n  \"username\": \"nuevo_player_01\",\n  \"password\": \"password123\",\n  \"roles\": [\"PLAYER\"]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth",
+            "register"
+          ]
+        },
+        "description": "Registra un usuario nuevo que no existe en la base de datos."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Register - Email Duplicado (409)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 409 Conflict\", function () {",
+              "    pm.response.to.have.status(409);",
+              "});",
+              "",
+              "pm.test(\"Error message mentions email usage\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.contain(\"correo electrónico ya está en uso\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"juan@test.com\",\n  \"username\": \"otro_juan\",\n  \"password\": \"password123\",\n  \"roles\": [\"PLAYER\"]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth",
+            "register"
+          ]
+        },
+        "description": "Intenta registrar un usuario con el email de Juan Pérez (existente en data.sql)."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Register - Username Duplicado (409)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 409 Conflict\", function () {",
+              "    pm.response.to.have.status(409);",
+              "});",
+              "",
+              "pm.test(\"Error message mentions username usage\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.contain(\"nombre de usuario ya está en uso\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"juan_fake@test.com\",\n  \"username\": \"juan_perez\",\n  \"password\": \"password123\",\n  \"roles\": [\"PLAYER\"]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth",
+            "register"
+          ]
+        },
+        "description": "Intenta registrar un usuario con el username de Juan Pérez (existente en data.sql)."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Register - Validación Fallida (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"invalido\",\n  \"username\": \"\",\n  \"password\": \"123\",\n  \"roles\": []\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth",
+            "register"
+          ]
+        },
+        "description": "Envía datos inválidos (password corto, username vacío) para probar @Valid."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Login - Juan Perez (Exitoso & Auto-Save Token)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "var jsonData = pm.response.json();",
+              "",
+              "pm.test(\"Token exists\", function () {",
+              "    pm.expect(jsonData.token).to.not.be.null;",
+              "});",
+              "",
+              "// SCRIPT AUTOMÁTICO:",
+              "// Guarda el token en la variable 'jwt_token' de la colección",
+              "// para que no tengas que copiar y pegar manualmente en otras pruebas.",
+              "pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+              "console.log(\"Token actualizado para: \" + jsonData.username);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"juan@test.com\",\n  \"password\": \"password\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
+        "description": "Se loguea con el usuario 'juan_perez' definido en el script data.sql. La contraseña es 'password'."
+      },
+      "response": []
+    },
+    {
+      "name": "6. Login - Credenciales Incorrectas (401)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 401 Unauthorized\", function () {",
+              "    pm.response.to.have.status(401);",
+              "});",
+              "",
+              "pm.test(\"Error message indicates bad credentials\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.message).to.contain(\"invalid credentials\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"juan@test.com\",\n  \"password\": \"PASSWORD_INCORRECTO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        },
+        "description": "Prueba de fallo de autenticación."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

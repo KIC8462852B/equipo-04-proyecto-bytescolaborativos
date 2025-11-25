@@ -1,5 +1,6 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.model;
 
-public class DummyModel {
+public enum UserRole {
+    ADMIN, PLAYER
 
 }

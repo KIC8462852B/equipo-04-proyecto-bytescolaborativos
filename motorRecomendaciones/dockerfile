@@ -1,0 +1,43 @@
+# ---------- STAGE 1: Build ----------
+FROM maven:3.9.8-eclipse-temurin-17 AS builder
+
+WORKDIR /workspace
+
+# Copia primero pom.xml para aprovechar cache de dependencias
+COPY pom.xml .
+
+
+# Descargar dependencias (cache)
+RUN mvn -B dependency:go-offline -DskipTests
+
+# Copia el código y empaqueta
+COPY src ./src
+RUN mvn -B -DskipTests package
+
+# ---------- STAGE 2: Runtime ----------
+FROM eclipse-temurin:17-jre-jammy AS runtime
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends curl \
+  && rm -rf /var/lib/apt/lists/*
+
+# Crear un usuario no-root
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
+
+WORKDIR /app
+
+# Copiar JAR construido desde el stage builder (wildcard para ser genérico)
+COPY --from=builder /workspace/target/*.jar app.jar
+
+# Exponer el puerto que use Spring Boot
+EXPOSE 8080
+
+# Healthcheck básico
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD curl -fsS http://localhost:8080/actuator/health || exit 1
+
+# Usar usuario no-root
+USER appuser
+
+# JVM flags óptimos para contenedores y Java 17
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-XX:+UseG1GC", "-jar", "/app/app.jar"]
