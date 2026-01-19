@@ -6,11 +6,10 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.Tournament;
-import com.motorRecomendacionesAPI.motorRecomendaciones.model.TournamentStatus;
+import com.motorRecomendacionesAPI.motorRecomendaciones.enums.TournamentStatus;
 
 public interface TournamentRepository extends JpaRepository<Tournament, UUID> {
  
     // OBTENEMOS TORNEOS POR ESTADO (OPEN, UPCOMING, CLOSED)
     List<Tournament> findByStatus(TournamentStatus status);
 }
-

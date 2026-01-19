@@ -3,6 +3,8 @@ package com.motorRecomendacionesAPI.motorRecomendaciones.model;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.motorRecomendacionesAPI.motorRecomendaciones.enums.TournamentStatus;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

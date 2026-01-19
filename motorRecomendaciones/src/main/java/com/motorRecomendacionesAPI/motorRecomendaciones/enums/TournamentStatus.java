@@ -1,4 +1,4 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.model;
+package com.motorRecomendacionesAPI.motorRecomendaciones.enums;
 
 public enum TournamentStatus {
     UPCOMING,

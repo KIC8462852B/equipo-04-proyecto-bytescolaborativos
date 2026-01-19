@@ -12,7 +12,7 @@ import com.motorRecomendacionesAPI.motorRecomendaciones.dto.TournamentResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.mapper.TournamentMapper;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.ResourceNotFoundException;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.Tournament;
-import com.motorRecomendacionesAPI.motorRecomendaciones.model.TournamentStatus;
+import com.motorRecomendacionesAPI.motorRecomendaciones.enums.TournamentStatus;
 import com.motorRecomendacionesAPI.motorRecomendaciones.repository.TournamentRepository;
 import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.TournamentService;
 

@@ -3,7 +3,7 @@ package com.motorRecomendacionesAPI.motorRecomendaciones.dto;
 import java.time.Instant;
 import java.util.UUID;
 
-import com.motorRecomendacionesAPI.motorRecomendaciones.model.TournamentStatus;
+import com.motorRecomendacionesAPI.motorRecomendaciones.enums.TournamentStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
