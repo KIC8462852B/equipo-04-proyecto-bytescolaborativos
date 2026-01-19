@@ -5,8 +5,8 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.motorRecomendacionesAPI.motorRecomendaciones.dto.tournament.CreateTournamentRequest;
-import com.motorRecomendacionesAPI.motorRecomendaciones.dto.tournament.TournamentResponse;
+import com.motorRecomendacionesAPI.motorRecomendaciones.dto.CreateTournamentRequest;
+import com.motorRecomendacionesAPI.motorRecomendaciones.dto.TournamentResponse;
 
 public interface TournamentService {
 

@@ -7,9 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.motorRecomendacionesAPI.motorRecomendaciones.dto.tournament.CreateTournamentRequest;
-import com.motorRecomendacionesAPI.motorRecomendaciones.dto.tournament.TournamentMapper;
-import com.motorRecomendacionesAPI.motorRecomendaciones.dto.tournament.TournamentResponse;
+import com.motorRecomendacionesAPI.motorRecomendaciones.dto.CreateTournamentRequest;
+import com.motorRecomendacionesAPI.motorRecomendaciones.dto.TournamentResponse;
+import com.motorRecomendacionesAPI.motorRecomendaciones.mapper.TournamentMapper;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.ResourceNotFoundException;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.Tournament;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.TournamentStatus;

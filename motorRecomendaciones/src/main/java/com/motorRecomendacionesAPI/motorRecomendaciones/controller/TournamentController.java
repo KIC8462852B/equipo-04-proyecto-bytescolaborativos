@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.ErrorResponse;
-import com.motorRecomendacionesAPI.motorRecomendaciones.dto.tournament.CreateTournamentRequest;
-import com.motorRecomendacionesAPI.motorRecomendaciones.dto.tournament.TournamentResponse;
+import com.motorRecomendacionesAPI.motorRecomendaciones.dto.CreateTournamentRequest;
+import com.motorRecomendacionesAPI.motorRecomendaciones.dto.TournamentResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.TournamentService;
 
 import io.swagger.v3.oas.annotations.Operation;

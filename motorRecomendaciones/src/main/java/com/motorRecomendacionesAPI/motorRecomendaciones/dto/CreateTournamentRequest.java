@@ -1,4 +1,4 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.dto.tournament;
+package com.motorRecomendacionesAPI.motorRecomendaciones.dto;
 
 import java.time.Instant;
 
