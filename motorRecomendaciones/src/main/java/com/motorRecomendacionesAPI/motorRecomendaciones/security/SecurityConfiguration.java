@@ -1,4 +1,4 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.config.security;
+package com.motorRecomendacionesAPI.motorRecomendaciones.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import com.motorRecomendacionesAPI.motorRecomendaciones.config.security.filter.JwtAuthenticationFilter;
+import com.motorRecomendacionesAPI.motorRecomendaciones.security.filter.JwtAuthenticationFilter;
 import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
 import com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation.UserDetailsServiceImpl;
 

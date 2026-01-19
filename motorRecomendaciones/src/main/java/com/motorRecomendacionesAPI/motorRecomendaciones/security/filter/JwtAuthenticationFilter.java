@@ -1,4 +1,4 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.config.security.filter;
+package com.motorRecomendacionesAPI.motorRecomendaciones.security.filter;
 
 import java.io.IOException;
 
