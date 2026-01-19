@@ -35,7 +35,9 @@ build/
 ### Docker ###
 .env
 
+### Local Spring config ###
+src/main/resources/application-local.yaml
+
 ### Logs ###
 *.log
 logs/
-

@@ -8,9 +8,9 @@ spring:
     name: motorRecomendaciones
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/motor_recomendaciones_db
-    username: postgres
-    password: Sandia4you
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -38,5 +38,5 @@ springdoc:
 
 # Jwt Config
 jwt:
-  secret: 2bd24c0f2ae17ea3bf23bccdf0b96af73a13e9c2f125b03293d3e1f71999f39b
-  expiration: 3600000  # 1 hora en milisegundos
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
