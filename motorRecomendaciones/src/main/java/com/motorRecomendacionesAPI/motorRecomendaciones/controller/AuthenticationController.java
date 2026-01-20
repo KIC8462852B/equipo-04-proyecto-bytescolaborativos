@@ -4,7 +4,7 @@ import com.motorRecomendacionesAPI.motorRecomendaciones.dto.AuthenticationReques
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.AuthenticationResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.ErrorResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RegisterRequest;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.AuthenticationService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;

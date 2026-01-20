@@ -1,4 +1,4 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces;
+package com.motorRecomendacionesAPI.motorRecomendaciones.service;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RecommendationResponse;
 

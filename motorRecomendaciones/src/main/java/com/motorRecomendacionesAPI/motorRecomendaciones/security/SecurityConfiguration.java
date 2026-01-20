@@ -25,7 +25,7 @@ import java.util.List;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.security.filter.JwtAuthenticationFilter;
 import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation.UserDetailsServiceImpl;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.UserDetailsServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 

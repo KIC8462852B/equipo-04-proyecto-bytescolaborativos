@@ -1,4 +1,4 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
+package com.motorRecomendacionesAPI.motorRecomendaciones.service;
 
 import java.util.List;
 

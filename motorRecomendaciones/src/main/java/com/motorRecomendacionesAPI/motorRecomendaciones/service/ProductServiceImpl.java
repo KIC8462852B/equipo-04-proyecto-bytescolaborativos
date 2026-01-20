@@ -1,9 +1,9 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
+package com.motorRecomendacionesAPI.motorRecomendaciones.service;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.ProductNotFoundException;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.Product;
 import com.motorRecomendacionesAPI.motorRecomendaciones.repository.ProductRepository;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.ProductService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

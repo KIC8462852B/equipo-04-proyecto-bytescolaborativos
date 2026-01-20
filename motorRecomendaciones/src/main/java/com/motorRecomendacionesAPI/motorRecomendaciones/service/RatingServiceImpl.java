@@ -1,4 +1,4 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
+package com.motorRecomendacionesAPI.motorRecomendaciones.service;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RatingRequest;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RatingResponse;
@@ -8,9 +8,9 @@ import com.motorRecomendacionesAPI.motorRecomendaciones.model.Product;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.Rating;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
 import com.motorRecomendacionesAPI.motorRecomendaciones.repository.RatingRepository;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.ProductService;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.RatingService;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.UserService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.ProductService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.RatingService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

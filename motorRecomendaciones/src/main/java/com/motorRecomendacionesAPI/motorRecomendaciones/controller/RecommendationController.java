@@ -2,7 +2,7 @@ package com.motorRecomendacionesAPI.motorRecomendaciones.controller;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.ErrorResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RecommendationResponse;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.RecommendationService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.RecommendationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

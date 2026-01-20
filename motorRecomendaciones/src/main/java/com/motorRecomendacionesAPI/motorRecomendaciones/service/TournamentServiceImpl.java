@@ -1,4 +1,4 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
+package com.motorRecomendacionesAPI.motorRecomendaciones.service;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -14,7 +14,7 @@ import com.motorRecomendacionesAPI.motorRecomendaciones.exception.ResourceNotFou
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.Tournament;
 import com.motorRecomendacionesAPI.motorRecomendaciones.enums.TournamentStatus;
 import com.motorRecomendacionesAPI.motorRecomendaciones.repository.TournamentRepository;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.TournamentService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.TournamentService;
 
 import lombok.RequiredArgsConstructor;
 

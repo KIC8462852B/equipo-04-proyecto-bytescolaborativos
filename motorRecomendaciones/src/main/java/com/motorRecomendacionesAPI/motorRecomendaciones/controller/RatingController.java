@@ -3,7 +3,7 @@ package com.motorRecomendacionesAPI.motorRecomendaciones.controller;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.ErrorResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RatingRequest;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RatingResponse;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.RatingService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.RatingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

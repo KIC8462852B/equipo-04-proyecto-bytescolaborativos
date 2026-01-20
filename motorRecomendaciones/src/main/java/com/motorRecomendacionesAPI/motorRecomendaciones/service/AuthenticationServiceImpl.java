@@ -1,10 +1,10 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
+package com.motorRecomendacionesAPI.motorRecomendaciones.service;
 
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.UserService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.UserService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +21,7 @@ import com.motorRecomendacionesAPI.motorRecomendaciones.dto.AuthenticationRespon
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RegisterRequest;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
 import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.AuthenticationService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.AuthenticationService;
 import com.motorRecomendacionesAPI.motorRecomendaciones.util.JwtUtil;
 
 import lombok.RequiredArgsConstructor;
