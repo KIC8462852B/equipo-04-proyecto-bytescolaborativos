@@ -1,12 +1,12 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
+package com.motorRecomendacionesAPI.motorRecomendaciones.service;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.Product;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.Recommendation;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
 import com.motorRecomendacionesAPI.motorRecomendaciones.repository.RecommendationRepository;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.ProductService;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.RatingService;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.UserService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.ProductService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.RatingService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

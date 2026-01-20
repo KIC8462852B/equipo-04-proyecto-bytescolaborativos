@@ -1,7 +1,7 @@
 package com.motorRecomendacionesAPI.motorRecomendaciones.controller;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RecommendationResponse;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.RecommendationService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.RecommendationService;
 import com.motorRecomendacionesAPI.motorRecomendaciones.util.JwtUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

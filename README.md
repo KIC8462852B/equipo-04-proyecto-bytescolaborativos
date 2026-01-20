@@ -123,8 +123,9 @@ docker-compose up -d
 - **Aplicacion**: http://localhost:8080
 - **Swagger UI**: http://localhost:8080/swagger-ui.html
 - **API Docs**: http://localhost:8080/api-docs
-- **PostgreSQL**: localhost:5432
-- **PgAdmin** (si usas el docker-compose raiz): http://localhost:5050
+- **PostgreSQL (docker-compose de motorRecomendaciones)**: localhost:5433
+- **PostgreSQL (docker-compose raiz)**: localhost:5432
+- **PgAdmin** (docker-compose raiz): http://localhost:5050
 
 ## 🧪 Testing
 

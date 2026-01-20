@@ -4,8 +4,8 @@ import com.motorRecomendacionesAPI.motorRecomendaciones.dto.AuthenticationReques
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.AuthenticationResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RegisterRequest;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.EmailAlreadyInUseException;
-import com.motorRecomendacionesAPI.motorRecomendaciones.model.UserRole;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.AuthenticationService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.enums.UserRole;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.AuthenticationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.motorRecomendacionesAPI.motorRecomendaciones.util.JwtUtil;
 import org.junit.jupiter.api.DisplayName;

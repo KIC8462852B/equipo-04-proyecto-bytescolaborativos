@@ -4,7 +4,7 @@ import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RatingRequest;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RatingResponse;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.DuplicateRatingException;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.RatingNotFoundException;
-import com.motorRecomendacionesAPI.motorRecomendaciones.service.interfaces.RatingService;
+import com.motorRecomendacionesAPI.motorRecomendaciones.service.RatingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.motorRecomendacionesAPI.motorRecomendaciones.util.JwtUtil;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package com.motorRecomendacionesAPI.motorRecomendaciones.service.implementation;
+package com.motorRecomendacionesAPI.motorRecomendaciones.service;
 
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.AuthenticationRequest;
 import com.motorRecomendacionesAPI.motorRecomendaciones.dto.AuthenticationResponse;
@@ -6,7 +6,7 @@ import com.motorRecomendacionesAPI.motorRecomendaciones.dto.RegisterRequest;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.EmailAlreadyInUseException;
 import com.motorRecomendacionesAPI.motorRecomendaciones.exception.UsernameAlreadyInUseException;
 import com.motorRecomendacionesAPI.motorRecomendaciones.model.User;
-import com.motorRecomendacionesAPI.motorRecomendaciones.model.UserRole;
+import com.motorRecomendacionesAPI.motorRecomendaciones.enums.UserRole;
 import com.motorRecomendacionesAPI.motorRecomendaciones.repository.UserRepository;
 import com.motorRecomendacionesAPI.motorRecomendaciones.util.JwtUtil;
 import org.junit.jupiter.api.DisplayName;
